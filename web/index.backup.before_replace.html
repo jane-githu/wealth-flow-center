@@ -1,0 +1,1411 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>财富中心</title>
+  <style>
+    :root {
+      --bg: #f6f1e6;
+      --paper: #fff9ef;
+      --ink: #213547;
+      --ink-soft: #4f5d6b;
+      --accent: #008f73;
+      --accent-2: #f27649;
+      --accent-3: #d6a21f;
+      --line: #d8d1c2;
+      --course: #3a7bd5;
+      --review: #e76f51;
+      --skill: #2a9d8f;
+      --knowledge: #b5792a;
+      --homework: #5d8b2f;
+      --shadow: 0 18px 40px rgba(39, 55, 77, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(242, 118, 73, 0.15), transparent 35%),
+        radial-gradient(circle at 90% 10%, rgba(0, 143, 115, 0.16), transparent 42%),
+        linear-gradient(135deg, #f9f4eb 0%, #f0f8f3 48%, #fff3e6 100%);
+      padding: 20px 14px 48px;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image: radial-gradient(rgba(35, 48, 66, 0.25) 0.7px, transparent 0.7px);
+      background-size: 6px 6px;
+      mix-blend-mode: overlay;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+      animation: rise 0.7s ease;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 22px 24px;
+      display: grid;
+      gap: 6px;
+      background:
+        linear-gradient(128deg, rgba(0, 143, 115, 0.16), rgba(255, 255, 255, 0.35)),
+        linear-gradient(12deg, rgba(242, 118, 73, 0.15), transparent);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 48px);
+      letter-spacing: 0.02em;
+      font-weight: 760;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .hero .clock {
+      margin-top: 8px;
+      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+      font-size: 13px;
+      color: #1d6f64;
+    }
+
+    .layout {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 14px 16px;
+      display: grid;
+      gap: 5px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(31, 53, 71, 0.12);
+    }
+
+    .stat .label {
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .stat .value {
+      font-size: 27px;
+      font-weight: 720;
+      line-height: 1.05;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 19px;
+    }
+
+    .panel h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: var(--ink-soft);
+    }
+
+    .form-row {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .form-split {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    input, select, button {
+      width: 100%;
+      border-radius: 11px;
+      border: 1px solid #cfd8dc;
+      padding: 10px 11px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(130deg, var(--accent), #2ca089);
+      color: #fff;
+      font-weight: 650;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); opacity: 0.92; }
+    button.secondary {
+      background: linear-gradient(130deg, #5f6f81, #7f93a7);
+      font-size: 12px;
+      padding: 7px 9px;
+      width: auto;
+      min-width: 78px;
+    }
+
+    button.warn {
+      background: linear-gradient(130deg, #2f6eb0, #5e8fce);
+    }
+
+    button.danger {
+      background: linear-gradient(130deg, #b24343, #d56a6a);
+    }
+
+    .mini {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .flash {
+      min-height: 18px;
+      font-size: 13px;
+      color: #165f61;
+      margin-top: 8px;
+    }
+
+    .tags {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(31, 53, 71, 0.2);
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag-chip {
+      border: 1px solid rgba(31, 53, 71, 0.14);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tag-chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(31, 53, 71, 0.35);
+    }
+
+    .chart {
+      display: grid;
+      gap: 8px;
+    }
+
+    .month-chart {
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .course-month-tags {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .course-month-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(31, 53, 71, 0.16);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: var(--ink);
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .course-month-chip strong {
+      font-weight: 650;
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 7px;
+      grid-template-columns: 86px 1fr 48px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 11px;
+      border-radius: 99px;
+      background: #edf1f3;
+      overflow: hidden;
+      border: 1px solid rgba(27, 40, 56, 0.08);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), #40c0a8);
+      width: 0%;
+      transition: width 0.28s ease;
+    }
+
+    .bar-fill.type-course { background: linear-gradient(90deg, var(--course), #76a4e3); }
+    .bar-fill.type-review { background: linear-gradient(90deg, var(--review), #ffb29b); }
+    .bar-fill.type-skill { background: linear-gradient(90deg, var(--skill), #71d4c7); }
+    .bar-fill.type-knowledge { background: linear-gradient(90deg, var(--knowledge), #e8b578); }
+    .bar-fill.type-homework { background: linear-gradient(90deg, var(--homework), #a9c97d); }
+
+    .quest-list {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .quest {
+      border: 1px solid rgba(31, 53, 71, 0.12);
+      border-left: 6px solid rgba(31, 53, 71, 0.22);
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .quest.done {
+      opacity: 0.66;
+      background: rgba(242, 248, 245, 0.78);
+    }
+
+    .quest-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      color: #fff;
+      background: var(--course);
+    }
+
+    .pill.review { background: var(--review); }
+    .pill.skill { background: var(--skill); }
+    .pill.knowledge { background: var(--knowledge); }
+    .pill.homework { background: var(--homework); }
+    .pill.done { background: #6f8d7e; }
+
+    .quest-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 630;
+    }
+
+    .quest-sub {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .course-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 620;
+      color: #122534;
+      border: 1px solid rgba(16, 37, 52, 0.12);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .sync {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      display: inline-block;
+    }
+
+    .sync.pending,
+    .sync.syncing {
+      color: #8f5d00;
+      background: #fff4d4;
+      border-color: #f0d28f;
+    }
+
+    .sync.done {
+      color: #0a6a56;
+      background: #e2f7f0;
+      border-color: #9edfcf;
+    }
+
+    .sync.failed {
+      color: #9f2f2f;
+      background: #ffe5e5;
+      border-color: #f2b5b5;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 16px 0;
+      font-size: 13px;
+    }
+
+    .outline {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .outline-day {
+      border: 1px solid rgba(31, 53, 71, 0.12);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .outline-day.today {
+      border-color: rgba(42, 157, 143, 0.45);
+      box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.12) inset;
+    }
+
+    .outline-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .outline-tasks {
+      display: grid;
+      gap: 6px;
+    }
+
+    .outline-item {
+      border-left: 5px solid rgba(31, 53, 71, 0.2);
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(248, 251, 252, 0.85);
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .outline-item-top {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .outline-item-time {
+      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+      color: #2d4657;
+      font-size: 11px;
+    }
+
+    .task-table-wrap {
+      margin-top: 10px;
+      border: 1px solid rgba(31, 53, 71, 0.12);
+      border-radius: 12px;
+      overflow: auto;
+      max-height: 420px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .task-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1040px;
+      font-size: 12px;
+    }
+
+    .task-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f6f0e2;
+      color: #425465;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      text-align: left;
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(31, 53, 71, 0.16);
+      white-space: nowrap;
+    }
+
+    .task-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(31, 53, 71, 0.1);
+      vertical-align: middle;
+    }
+
+    .task-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .task-table tr.done {
+      opacity: 0.72;
+      background: rgba(242, 248, 245, 0.72);
+    }
+
+    .task-title-cell {
+      font-size: 13px;
+      font-weight: 620;
+      color: var(--ink);
+      min-width: 220px;
+    }
+
+    .task-time-cell {
+      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+      color: #2d4657;
+      line-height: 1.35;
+      white-space: nowrap;
+      min-width: 182px;
+    }
+
+    .task-actions-cell .actions {
+      justify-content: flex-start;
+      gap: 5px;
+      flex-wrap: nowrap;
+    }
+
+    .task-empty {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 18px 0;
+      font-size: 13px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-pill.running {
+      background: #e8fbf3;
+      border-color: #9ddfca;
+      color: #0d6a56;
+    }
+
+    .status-pill.upcoming {
+      background: #eef4ff;
+      border-color: #aec4f3;
+      color: #224d95;
+    }
+
+    .status-pill.overdue {
+      background: #fff0e8;
+      border-color: #f4c3a8;
+      color: #954b22;
+    }
+
+    .status-pill.done {
+      background: #edf0f3;
+      border-color: #c5ced7;
+      color: #4d6073;
+    }
+
+    .floating-reminder {
+      position: fixed;
+      right: 16px;
+      bottom: 18px;
+      width: min(92vw, 320px);
+      z-index: 30;
+      border-radius: 16px;
+      border: 1px solid rgba(19, 43, 58, 0.22);
+      background: rgba(255, 252, 245, 0.95);
+      box-shadow: 0 14px 30px rgba(27, 40, 56, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .floating-reminder.running {
+      border-color: rgba(13, 106, 86, 0.4);
+    }
+
+    .floating-reminder.idle {
+      border-color: rgba(149, 75, 34, 0.35);
+    }
+
+    .floating-reminder h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #2d3f4e;
+    }
+
+    .floating-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .floating-kv {
+      border-radius: 11px;
+      border: 1px solid rgba(31, 53, 71, 0.15);
+      background: rgba(255, 255, 255, 0.82);
+      padding: 7px 8px;
+      display: grid;
+      gap: 2px;
+    }
+
+    .floating-kv .k {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .floating-kv .v {
+      font-size: 14px;
+      font-weight: 680;
+      color: var(--ink);
+    }
+
+    .floating-task {
+      font-size: 12px;
+      color: #2f4352;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .floating-next {
+      font-size: 11px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (min-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .grid-two { grid-template-columns: 1fr 1fr; }
+      .form-split { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+  <main class="app">
+    <section class="hero card">
+      <h1>财富中心</h1>
+      <div class="clock" id="clock">正在加载...</div>
+    </section>
+
+    <section class="stats">
+      <div class="stat card"><span class="label">连续学习</span><span class="value" id="v-streak">0 天</span></div>
+      <div class="stat card"><span class="label">总学习时长</span><span class="value" id="v-minutes">0 分钟</span></div>
+    </section>
+
+    <section class="layout">
+      <article class="panel card">
+        <h2>最近 1 个月学习时长</h2>
+        <div class="chart month-chart" id="dayChart"></div>
+        <div class="mini">课程学习数据标签（最近 30 天）</div>
+        <div class="course-month-tags" id="courseMonthTags"></div>
+      </article>
+
+      <section class="grid-two">
+        <article class="panel card">
+          <h2>创建学习任务</h2>
+          <form id="questForm">
+            <div class="form-row">
+              <label for="taskType">学习类型</label>
+              <select id="taskType" name="task_type">
+                <option value="course">课程学习</option>
+                <option value="review">复习巩固</option>
+                <option value="skill">技能拓展</option>
+                <option value="knowledge">知识库搭建</option>
+                <option value="homework">做作业</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="courseName">课程/技能名称</label>
+              <input id="courseName" name="course_name" placeholder="例如 CS584 / Python">
+            </div>
+            <div class="form-row">
+              <label for="title">任务标题</label>
+              <input id="title" name="title" required placeholder="例如 Module 11: 问答与可视化路径">
+            </div>
+            <div class="form-split">
+              <div class="form-row">
+                <label for="start">开始时间</label>
+                <input id="start" name="start" type="datetime-local" required>
+              </div>
+              <div class="form-row">
+                <label for="end">结束时间</label>
+                <input id="end" name="end" type="datetime-local" required>
+              </div>
+            </div>
+            <div class="mini" id="formModeHint">当前：新建模式</div>
+            <div class="actions" style="justify-content:flex-start; margin-top: 6px;">
+              <button type="submit" id="submitBtn">创建任务并写入苹果日历</button>
+              <button type="button" class="secondary" id="cancelEditBtn" style="display:none;">取消修改</button>
+            </div>
+            <div class="flash" id="flash"></div>
+
+            <div class="tags">
+              <div class="mini">复习快捷标签（点击即可按历史时长自动创建下一次复习）</div>
+              <div class="tag-cloud" id="tagCloud"></div>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel card">
+          <h2>任务与倒计时表</h2>
+          <div class="mini">统一查看任务、倒计时、日历同步状态，并可直接完成、修改、删除。</div>
+          <div class="task-table-wrap">
+            <table class="task-table">
+              <thead>
+                <tr>
+                  <th>类型</th>
+                  <th>标题</th>
+                  <th>课程/技能</th>
+                  <th>时间</th>
+                  <th>倒计时</th>
+                  <th>日历</th>
+                  <th>奖励</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="taskTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <h2>学习类型分布</h2>
+          <div class="chart" id="typeChart"></div>
+        </article>
+
+        <article class="panel card">
+          <h2>每周学习大纲</h2>
+          <div class="mini">按周一到周日查看本周学习安排。</div>
+          <div class="outline" id="weeklyOutline"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <aside class="floating-reminder idle" id="floatingReminder" aria-live="polite">
+    <h3>学习悬浮提醒</h3>
+    <div class="floating-grid">
+      <div class="floating-kv">
+        <div class="k">本次学习剩余</div>
+        <div class="v" id="floatRemain">-</div>
+      </div>
+      <div class="floating-kv">
+        <div class="k">未学习时长</div>
+        <div class="v" id="floatIdle">-</div>
+      </div>
+    </div>
+    <div class="floating-task" id="floatTask">当前：暂无进行中的学习</div>
+    <div class="floating-next" id="floatNext">下次学习：暂无待学习任务</div>
+  </aside>
+
+  <script>
+    const TYPE_META = {
+      course: { label: "课程学习", className: "course" },
+      review: { label: "复习巩固", className: "review" },
+      skill: { label: "技能拓展", className: "skill" },
+      knowledge: { label: "知识库搭建", className: "knowledge" },
+      homework: { label: "做作业", className: "homework" },
+    };
+
+    const STATE_POLL_INTERVAL_MS = 15000;
+    const COUNTDOWN_REFRESH_MS = 1000;
+
+    let latestData = null;
+    let editingQuestId = null;
+    let isLoadingState = false;
+    let latestLoadRequestId = 0;
+    let latestAppliedRequestId = 0;
+    let lastRenderSignature = "";
+
+    function apiTimeFromInput(value) {
+      return value ? value.replace("T", " ") : "";
+    }
+
+    function ratio(value, total) {
+      if (!total || total <= 0) return 0;
+      return Math.max(0, Math.min(100, (value / total) * 100));
+    }
+
+    function shortDate(value) {
+      return value ? value.slice(5) : value;
+    }
+
+    function hashText(input) {
+      const text = String(input || "");
+      let h = 0;
+      for (let i = 0; i < text.length; i++) {
+        h = (h * 31 + text.charCodeAt(i)) >>> 0;
+      }
+      return h;
+    }
+
+    function courseColor(courseName, title) {
+      const seed = (courseName && courseName.trim()) ? courseName.trim() : (title || "学习");
+      const hue = hashText(seed) % 360;
+      return {
+        strong: `hsl(${hue} 68% 46%)`,
+        soft: `hsl(${hue} 88% 94%)`,
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function toInputDateTime(apiTime) {
+      return apiTime ? apiTime.replace(" ", "T") : "";
+    }
+
+    function parseApiTime(apiTime) {
+      if (!apiTime) return null;
+      const d = new Date(apiTime.replace(" ", "T"));
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    function formatDuration(seconds) {
+      const s = Math.max(0, Math.floor(seconds));
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const mins = Math.floor((s % 3600) / 60);
+      const secs = s % 60;
+      const parts = [];
+      if (days > 0) parts.push(`${days}天`);
+      if (hours > 0 || days > 0) parts.push(`${hours}小时`);
+      parts.push(`${mins}分`);
+      parts.push(`${secs}秒`);
+      return parts.join("");
+    }
+
+    function countdownInfo(quest, now = new Date()) {
+      const start = parseApiTime(quest.start);
+      const end = parseApiTime(quest.end);
+      if (!start || !end) {
+        return { status: "unknown", text: "时间格式异常", cls: "overdue" };
+      }
+      if (quest.status === "done") {
+        return { status: "done", text: "已完成", cls: "done" };
+      }
+      if (now < start) {
+        const seconds = (start.getTime() - now.getTime()) / 1000;
+        return { status: "upcoming", text: `距开始 ${formatDuration(seconds)}`, cls: "upcoming" };
+      }
+      if (now >= start && now <= end) {
+        const seconds = (end.getTime() - now.getTime()) / 1000;
+        return { status: "running", text: `距结束 ${formatDuration(seconds)}`, cls: "running" };
+      }
+      const seconds = (now.getTime() - end.getTime()) / 1000;
+      return { status: "overdue", text: `已超时 ${formatDuration(seconds)}`, cls: "overdue" };
+    }
+
+    function setFlash(text, isError = false) {
+      const el = document.getElementById("flash");
+      el.textContent = text;
+      el.style.color = isError ? "#b23b3b" : "#165f61";
+    }
+
+    function setFormMode(editMode, questId = null) {
+      const modeHint = document.getElementById("formModeHint");
+      const submitBtn = document.getElementById("submitBtn");
+      const cancelBtn = document.getElementById("cancelEditBtn");
+
+      editingQuestId = editMode ? questId : null;
+      if (editMode) {
+        modeHint.textContent = `当前：修改模式（任务 ID=${questId}）`;
+        submitBtn.textContent = "保存修改";
+        cancelBtn.style.display = "inline-block";
+      } else {
+        modeHint.textContent = "当前：新建模式";
+        submitBtn.textContent = "创建任务并写入苹果日历";
+        cancelBtn.style.display = "none";
+      }
+    }
+
+    function syncStatusText(status) {
+      if (status === "pending" || status === "syncing") return "日历同步中";
+      if (status === "done") return "已同步到日历";
+      if (status === "failed") return "日历同步失败";
+      return "日历状态未知";
+    }
+
+    function normalizeSyncStatus(status) {
+      const allowed = ["pending", "syncing", "done", "failed"];
+      return allowed.includes(status) ? status : "pending";
+    }
+
+    function findRunningQuest(quests, now = new Date()) {
+      const rows = [];
+      (quests || []).forEach((q) => {
+        if (q.status === "done") return;
+        const start = parseApiTime(q.start);
+        const end = parseApiTime(q.end);
+        if (!start || !end) return;
+        if (now >= start && now <= end) rows.push({ q, end });
+      });
+      rows.sort((a, b) => a.end.getTime() - b.end.getTime());
+      return rows.length > 0 ? rows[0].q : null;
+    }
+
+    function findNextQuest(quests, now = new Date()) {
+      let nextQuest = null;
+      let nextStart = null;
+      (quests || []).forEach((q) => {
+        if (q.status === "done") return;
+        const start = parseApiTime(q.start);
+        if (!start || start <= now) return;
+        if (!nextStart || start < nextStart) {
+          nextStart = start;
+          nextQuest = q;
+        }
+      });
+      return nextQuest;
+    }
+
+    function lastStudyTime(quests) {
+      let latest = null;
+      (quests || []).forEach((q) => {
+        if (q.status !== "done") return;
+        const point = parseApiTime(q.completed_at || q.end || q.start);
+        if (!point) return;
+        if (!latest || point > latest) latest = point;
+      });
+      return latest;
+    }
+
+    function renderFloatingReminder(data, now = new Date()) {
+      const root = document.getElementById("floatingReminder");
+      const remainEl = document.getElementById("floatRemain");
+      const idleEl = document.getElementById("floatIdle");
+      const taskEl = document.getElementById("floatTask");
+      const nextEl = document.getElementById("floatNext");
+      if (!root || !remainEl || !idleEl || !taskEl || !nextEl) return;
+
+      const quests = data?.quests || [];
+      const running = findRunningQuest(quests, now);
+      const nextQuest = findNextQuest(quests, now);
+
+      if (running) {
+        const end = parseApiTime(running.end);
+        const remainSec = end ? (end.getTime() - now.getTime()) / 1000 : 0;
+        root.className = "floating-reminder running";
+        remainEl.textContent = formatDuration(remainSec);
+        idleEl.textContent = "进行中";
+        taskEl.textContent = `当前：${running.title || "学习中"}`;
+      } else {
+        root.className = "floating-reminder idle";
+        remainEl.textContent = "-";
+        taskEl.textContent = "当前：未在学习";
+        const lastPoint = lastStudyTime(quests);
+        if (!lastPoint) {
+          idleEl.textContent = "暂无记录";
+        } else {
+          idleEl.textContent = formatDuration((now.getTime() - lastPoint.getTime()) / 1000);
+        }
+      }
+
+      if (nextQuest) {
+        const nextStart = parseApiTime(nextQuest.start);
+        const waitSec = nextStart ? (nextStart.getTime() - now.getTime()) / 1000 : 0;
+        nextEl.textContent = `下次学习：${formatDuration(waitSec)} 后 · ${nextQuest.title || "未命名任务"}`;
+      } else {
+        nextEl.textContent = "下次学习：暂无待学习任务";
+      }
+    }
+
+    function stableRenderSignature(data) {
+      return JSON.stringify({
+        player: data?.player || {},
+        quests: data?.quests || [],
+        quick_tags: data?.quick_tags || [],
+        charts: data?.charts || {},
+        weekly_outline: data?.weekly_outline || [],
+      });
+    }
+
+    function updateClock(serverTime) {
+      document.getElementById("clock").textContent = "服务器时间：" + String(serverTime || "");
+    }
+
+    function applyDashboardData(data, forceRender = false) {
+      if (!data || typeof data !== "object") return;
+      latestData = data;
+      if (forceRender) {
+        // Ignore older in-flight polling responses after local mutations.
+        latestAppliedRequestId = latestLoadRequestId + 1;
+      }
+
+      const signature = stableRenderSignature(data);
+      if (forceRender || signature !== lastRenderSignature) {
+        lastRenderSignature = signature;
+        render(latestData);
+        return;
+      }
+
+      updateClock(latestData.server_time);
+      refreshTaskCountdowns(latestData.quests || []);
+      renderFloatingReminder(latestData);
+    }
+
+    async function loadState(silent = false) {
+      if (isLoadingState) return;
+      isLoadingState = true;
+      const requestId = ++latestLoadRequestId;
+      try {
+        const res = await fetch("/api/state", { cache: "no-store" });
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error || "加载失败");
+        if (requestId < latestAppliedRequestId) return;
+        latestAppliedRequestId = requestId;
+        applyDashboardData(payload.data);
+      } catch (err) {
+        if (!silent) {
+          setFlash(`加载失败：${err.message || err}`, true);
+        }
+      } finally {
+        isLoadingState = false;
+      }
+    }
+
+    async function createFromTag(tagId) {
+      try {
+        const res = await fetch(`/api/tags/${tagId}/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ write_calendar: true }),
+        });
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error || "标签创建失败");
+        applyDashboardData(payload.data, true);
+        setFlash(`已通过标签创建复习任务（${payload.start} - ${payload.end}）。`);
+      } catch (err) {
+        setFlash(String(err.message || err), true);
+      }
+    }
+
+    function startEditQuest(questId) {
+      if (!latestData) return;
+      const target = (latestData.quests || []).find((q) => Number(q.id) === Number(questId));
+      if (!target) {
+        setFlash("找不到要修改的任务。", true);
+        return;
+      }
+      if (target.status === "done") {
+        setFlash("已完成任务暂不支持修改。", true);
+        return;
+      }
+
+      document.getElementById("taskType").value = target.task_type || "course";
+      document.getElementById("courseName").value = target.course_name || "";
+      document.getElementById("title").value = target.title || "";
+      document.getElementById("start").value = toInputDateTime(target.start || "");
+      document.getElementById("end").value = toInputDateTime(target.end || "");
+      setFormMode(true, target.id);
+      setFlash(`正在修改任务 ID=${target.id}`);
+      document.getElementById("title").focus();
+    }
+
+    async function deleteQuest(questId) {
+      const ok = window.confirm(`确定删除任务 ID=${questId} 吗？`);
+      if (!ok) return;
+      try {
+        const res = await fetch(`/api/quests/${questId}`, { method: "DELETE" });
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error || "删除失败");
+        applyDashboardData(payload.data, true);
+        setFlash(`任务 ID=${questId} 已删除。`);
+      } catch (err) {
+        setFlash(String(err.message || err), true);
+      }
+    }
+
+    function render(data) {
+      updateClock(data.server_time);
+
+      const p = data.player;
+      document.getElementById("v-streak").textContent = p.streak + " 天";
+      document.getElementById("v-minutes").textContent = p.total_minutes + " 分钟";
+
+      renderDayChart(data.charts?.days || [], data.charts?.day_minutes || []);
+      renderCourseMonthTags(data.charts?.course_minutes || []);
+      renderTypeChart(data.charts?.type_minutes || {});
+      renderQuickTags(data.quick_tags || []);
+      renderTaskTable(data.quests || []);
+      renderWeeklyOutline(data.weekly_outline || []);
+      renderFloatingReminder(data);
+    }
+
+    function renderCourseMonthTags(courseMinutes) {
+      const root = document.getElementById("courseMonthTags");
+      root.innerHTML = "";
+      if (!courseMinutes || courseMinutes.length === 0) {
+        root.innerHTML = '<span class="mini">最近 30 天暂无已完成课程数据。</span>';
+        return;
+      }
+
+      courseMinutes.slice(0, 10).forEach((item) => {
+        const name = String(item.course_name || "未命名课程");
+        const minutes = Number(item.minutes || 0);
+        const sessions = Number(item.sessions || 0);
+        const color = courseColor(name, name);
+        const chip = document.createElement("span");
+        chip.className = "course-month-chip";
+        chip.style.borderColor = color.strong;
+        chip.style.background = color.soft;
+        chip.innerHTML = `<strong>${escapeHtml(name)}</strong><span>${minutes}m</span><span>${sessions}次</span>`;
+        root.appendChild(chip);
+      });
+    }
+
+    function renderQuickTags(tags) {
+      const root = document.getElementById("tagCloud");
+      root.innerHTML = "";
+      if (!tags || tags.length === 0) {
+        root.innerHTML = '<span class="mini">暂无标签。创建一次课程后会自动生成。</span>';
+        return;
+      }
+
+      tags.slice(0, 20).forEach((tag) => {
+        const btn = document.createElement("button");
+        const color = courseColor(tag.course_name, tag.title);
+        btn.type = "button";
+        btn.className = "tag-chip";
+        btn.textContent = `${tag.label} · ${tag.duration_minutes}m`;
+        btn.title = `使用 ${tag.uses} 次，点击一键创建下一次复习`;
+        btn.style.borderColor = color.strong;
+        btn.style.background = color.soft;
+        btn.addEventListener("click", () => createFromTag(tag.id));
+        root.appendChild(btn);
+      });
+    }
+
+    function renderTaskTable(quests) {
+      const root = document.getElementById("taskTableBody");
+      root.innerHTML = "";
+      if (!quests || quests.length === 0) {
+        root.innerHTML = '<tr><td class="task-empty" colspan="8">还没有任务，先创建一条学习计划。</td></tr>';
+        return;
+      }
+
+      const sorted = [...quests].sort((a, b) => {
+        const aDone = a.status === "done" ? 1 : 0;
+        const bDone = b.status === "done" ? 1 : 0;
+        if (aDone !== bDone) return aDone - bDone;
+        const sa = parseApiTime(a.start)?.getTime() || 0;
+        const sb = parseApiTime(b.start)?.getTime() || 0;
+        return sa - sb;
+      });
+
+      sorted.forEach((q) => {
+        const typeMeta = TYPE_META[q.task_type] || TYPE_META.course;
+        const done = q.status === "done";
+        const color = courseColor(q.course_name, q.title);
+        const info = countdownInfo(q, new Date());
+        const syncStatus = normalizeSyncStatus(q.calendar_sync_status || "done");
+        const syncText = syncStatusText(syncStatus);
+        const syncMsg = q.calendar_sync_message ? ` ${escapeHtml(q.calendar_sync_message)}` : "";
+        const courseChip = q.course_name
+          ? `<span class="course-chip" style="background:${color.soft}; border-color:${color.strong};">${escapeHtml(q.course_name)}</span>`
+          : '<span class="mini">-</span>';
+        const row = document.createElement("tr");
+        row.className = done ? "done" : "";
+        row.innerHTML = `
+          <td><span class="pill ${typeMeta.className} ${done ? "done" : ""}">${done ? "已完成" : typeMeta.label}</span></td>
+          <td class="task-title-cell">${escapeHtml(q.title)}</td>
+          <td>${courseChip}</td>
+          <td class="task-time-cell">${escapeHtml(q.start)}<br>${escapeHtml(q.end)}（${q.duration_minutes} 分钟）</td>
+          <td><span class="status-pill ${info.cls} js-countdown" data-quest-id="${q.id}">${info.text}</span></td>
+          <td><span class="sync ${syncStatus}">${syncText}</span><span class="mini">${syncMsg}</span></td>
+          <td>${q.reward_xp} XP / ${q.reward_wealth}</td>
+          <td class="task-actions-cell">
+            <div class="actions">
+              ${done ? "" : `<button class="secondary" data-action="complete" data-id="${q.id}">完成</button>`}
+              ${done ? "" : `<button class="secondary warn" data-action="edit" data-id="${q.id}">修改</button>`}
+              <button class="secondary danger" data-action="delete" data-id="${q.id}">删除</button>
+            </div>
+          </td>
+        `;
+        root.appendChild(row);
+      });
+
+      root.querySelectorAll("button[data-action]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const action = btn.getAttribute("data-action");
+          const id = btn.getAttribute("data-id");
+          if (!id) return;
+
+          if (action === "edit") {
+            startEditQuest(id);
+            return;
+          }
+
+          if (action === "delete") {
+            await deleteQuest(id);
+            return;
+          }
+
+          if (action === "complete") {
+            btn.disabled = true;
+            try {
+              const res = await fetch(`/api/quests/${id}/complete`, { method: "POST" });
+              const payload = await res.json();
+              if (!payload.ok) throw new Error(payload.error || "完成任务失败");
+              setFlash("任务已完成，财富值已结算。");
+              applyDashboardData(payload.data, true);
+            } catch (err) {
+              setFlash(String(err.message || err), true);
+              btn.disabled = false;
+            }
+          }
+        });
+      });
+    }
+
+    function refreshTaskCountdowns(quests) {
+      const map = new Map((quests || []).map((q) => [String(q.id), q]));
+      document.querySelectorAll(".js-countdown").forEach((el) => {
+        const id = el.getAttribute("data-quest-id");
+        if (!id) return;
+        const quest = map.get(id);
+        if (!quest) return;
+        const info = countdownInfo(quest, new Date());
+        el.textContent = info.text;
+        el.className = `status-pill ${info.cls} js-countdown`;
+      });
+    }
+
+    function renderWeeklyOutline(outlineDays) {
+      const root = document.getElementById("weeklyOutline");
+      root.innerHTML = "";
+      if (!outlineDays || outlineDays.length === 0) {
+        root.innerHTML = '<div class="empty">暂无本周安排。</div>';
+        return;
+      }
+
+      outlineDays.forEach((day) => {
+        const dayCard = document.createElement("div");
+        dayCard.className = "outline-day" + (day.is_today ? " today" : "");
+
+        const tasks = day.tasks || [];
+        const taskHTML = tasks.length === 0
+          ? '<div class="mini">暂无任务</div>'
+          : `<div class="outline-tasks">${tasks.map((t) => {
+              const color = courseColor(t.course_name, t.title);
+              const courseText = t.course_name ? `<span class="course-chip" style="background:${color.soft}; border-color:${color.strong};">${t.course_name}</span>` : "";
+              const statusText = t.status === "done" ? "已完成" : "待开始";
+              return `
+                <div class="outline-item" style="border-left-color:${color.strong};">
+                  <div class="outline-item-top">
+                    <span class="outline-item-time">${t.start_time} - ${t.end_time}</span>
+                    <span class="pill ${TYPE_META[t.task_type]?.className || "course"} ${t.status === "done" ? "done" : ""}">${statusText}</span>
+                    ${courseText}
+                  </div>
+                  <div>${t.title}</div>
+                </div>
+              `;
+            }).join("")}</div>`;
+
+        dayCard.innerHTML = `
+          <div class="outline-head">
+            <strong>${day.weekday}</strong>
+            <span>${day.date}</span>
+          </div>
+          ${taskHTML}
+        `;
+        root.appendChild(dayCard);
+      });
+    }
+
+    function renderDayChart(days, minutes) {
+      const root = document.getElementById("dayChart");
+      root.innerHTML = "";
+      if (!days || days.length === 0) {
+        root.innerHTML = '<div class="empty">暂无数据</div>';
+        return;
+      }
+      const max = Math.max(...minutes, 1);
+      days.forEach((day, i) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        row.innerHTML = `
+          <span>${shortDate(day)}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${ratio(minutes[i], max)}%"></div></div>
+          <span>${minutes[i]}m</span>
+        `;
+        root.appendChild(row);
+      });
+    }
+
+    function renderTypeChart(typeMinutes) {
+      const root = document.getElementById("typeChart");
+      root.innerHTML = "";
+      const entries = Object.keys(TYPE_META).map((key) => ({
+        key,
+        label: TYPE_META[key].label,
+        minutes: Number(typeMinutes[key] || 0),
+      }));
+      const max = Math.max(...entries.map((e) => e.minutes), 1);
+      entries.forEach((entry) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        row.innerHTML = `
+          <span>${entry.label}</span>
+          <div class="bar-track">
+            <div class="bar-fill type-${entry.key}" style="width:${ratio(entry.minutes, max)}%"></div>
+          </div>
+          <span>${entry.minutes}m</span>
+        `;
+        root.appendChild(row);
+      });
+    }
+
+    document.getElementById("questForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const formData = new FormData(form);
+
+      const payload = {
+        task_type: String(formData.get("task_type") || "course"),
+        course_name: String(formData.get("course_name") || "").trim(),
+        title: String(formData.get("title") || "").trim(),
+        start: apiTimeFromInput(String(formData.get("start") || "")),
+        end: apiTimeFromInput(String(formData.get("end") || "")),
+        write_calendar: true,
+      };
+
+      try {
+        const url = editingQuestId ? `/api/quests/${editingQuestId}` : "/api/quests";
+        const method = editingQuestId ? "PATCH" : "POST";
+        if (editingQuestId) {
+          // Avoid creating duplicate calendar events while editing.
+          payload.write_calendar = false;
+        }
+
+        const res = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json();
+        if (!result.ok) throw new Error(result.error || "创建失败");
+
+        if (editingQuestId) {
+          setFlash(`任务 ID=${editingQuestId} 已修改。`);
+        } else {
+          setFlash(`任务创建成功（ID=${result.quest_id}），日历后台同步中。`);
+        }
+
+        form.reset();
+        setFormMode(false);
+        applyDashboardData(result.data, true);
+      } catch (err) {
+        setFlash(String(err.message || err), true);
+      }
+    });
+
+    document.getElementById("cancelEditBtn").addEventListener("click", () => {
+      document.getElementById("questForm").reset();
+      setFormMode(false);
+      setFlash("已取消修改。");
+    });
+
+    setFormMode(false);
+    loadState();
+    setInterval(() => {
+      if (document.hidden || editingQuestId) return;
+      loadState(true);
+    }, STATE_POLL_INTERVAL_MS);
+    setInterval(() => {
+      if (!latestData) return;
+      refreshTaskCountdowns(latestData.quests || []);
+      renderFloatingReminder(latestData);
+    }, COUNTDOWN_REFRESH_MS);
+  </script>
+</body>
+</html>

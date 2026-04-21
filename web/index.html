@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财富流通中心</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+:root{
+  --bg:#fffdf8; --bg2:#fffbf2;
+  --card:rgba(255,253,246,0.90); --cb:rgba(206,164,78,0.16);
+  --gold:#927a48; --gold2:#b29a67; --gold3:#d3bf8e; --goldp:#f4ebcf;
+  --text:#332815; --t2:#7f7158; --t3:#aa9a7b; --t4:#c9bca4;
+  --red:#9b665c; --green:#5f7f69; --blue:#607f92;
+  --serif:'Noto Serif SC','Songti SC','STSong',serif;
+  --body:'Noto Serif SC','Noto Sans SC','Songti SC','PingFang SC','Microsoft YaHei',serif;
+  --r:14px; --rs:8px;
+  --shadow:0 2px 16px rgba(160,120,40,.05),0 1px 3px rgba(160,120,40,.04);
+  --bd-grad-soft:linear-gradient(120deg,rgba(206,164,78,.30) 0%,rgba(206,164,78,.09) 50%,rgba(206,164,78,.26) 100%);
+  --bd-grad-strong:linear-gradient(120deg,rgba(220,176,88,.44) 0%,rgba(220,176,88,.13) 50%,rgba(220,176,88,.38) 100%);
+  --bd-grad-green:linear-gradient(120deg,rgba(95,127,105,.34) 0%,rgba(95,127,105,.1) 50%,rgba(95,127,105,.28) 100%);
+  --bd-grad-red:linear-gradient(120deg,rgba(155,102,92,.34) 0%,rgba(155,102,92,.1) 50%,rgba(155,102,92,.28) 100%);
+  --tag-bd-grad:linear-gradient(120deg,rgba(206,164,78,.30) 0%,rgba(206,164,78,.18) 28%,rgba(232,190,64,.56) 62%,rgba(245,203,82,.72) 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:var(--body);font-size:15px;color:var(--text);background:#fffef9}
+#root{min-height:100vh;position:relative;filter:saturate(1.5) contrast(1) brightness(0.96)}
+
+/* ── silk background layers ──────────────────────────── */
+.silk-bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#fffef8}
+.silk-bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(255,255,255,.30),transparent 42%),
+    radial-gradient(circle at 82% 12%,rgba(255,255,255,.22),transparent 44%),
+    radial-gradient(circle at 50% 85%,rgba(255,255,255,.15),transparent 46%);
+}
+
+/* large soft colour blobs */
+.sb{position:absolute;border-radius:50%;filter:blur(84px)}
+.sb1{width:90vw;height:90vw;top:-30%;left:-20%;
+     background:radial-gradient(circle at 40% 40%,rgba(246,218,126,.40),rgba(251,234,182,.22) 40%,transparent 70%);
+     animation:sd1 22s ease-in-out infinite alternate}
+.sb2{width:75vw;height:75vw;bottom:-25%;right:-18%;
+     background:radial-gradient(circle at 60% 60%,rgba(244,187,162,.34),rgba(252,212,195,.20) 40%,transparent 70%);
+     animation:sd2 26s ease-in-out infinite alternate-reverse}
+.sb3{width:65vw;height:65vw;top:10%;right:-5%;
+     background:radial-gradient(circle at 50% 50%,rgba(216,201,250,.30),rgba(231,220,252,.18) 40%,transparent 68%);
+     animation:sd3 19s ease-in-out infinite alternate}
+.sb4{width:70vw;height:70vw;top:30%;left:-5%;
+     background:radial-gradient(circle at 50% 50%,rgba(252,224,182,.32),rgba(255,236,203,.18) 45%,transparent 70%);
+     animation:sd4 23s ease-in-out infinite alternate-reverse}
+.sb5{width:55vw;height:55vw;bottom:0%;left:25%;
+     background:radial-gradient(circle at 50% 50%,rgba(247,197,220,.26),rgba(252,216,232,.16) 45%,transparent 68%);
+     animation:sd5 28s ease-in-out infinite alternate}
+.sb6{width:45vw;height:45vw;top:50%;right:15%;
+     background:radial-gradient(circle at 50% 50%,rgba(184,221,242,.22),transparent 65%);
+     animation:sd6 31s ease-in-out infinite alternate-reverse}
+
+@keyframes sd1{0%{transform:translate(0,0) rotate(0deg) scale(1)}100%{transform:translate(6%,9%) rotate(14deg) scale(1.06)}}
+@keyframes sd2{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-8%,-7%) rotate(-11deg) scale(1.04)}}
+@keyframes sd3{0%{transform:translate(0,0)}100%{transform:translate(-5%,11%) rotate(8deg) scale(1.05)}}
+@keyframes sd4{0%{transform:translate(0,0)}100%{transform:translate(7%,-6%) rotate(-13deg) scale(1.03)}}
+@keyframes sd5{0%{transform:translate(0,0)}100%{transform:translate(-4%,8%) rotate(10deg) scale(1.04)}}
+@keyframes sd6{0%{transform:translate(0,0)}100%{transform:translate(5%,-9%) rotate(-7deg) scale(1.06)}}
+
+/* silk highlight bands — the characteristic sheen of silk */
+.sband{position:absolute;left:-8%;right:-8%;pointer-events:none}
+.sband::before{content:'';display:block;width:100%;border-radius:50%}
+.sh1{top:8%;height:160px;
+     background:linear-gradient(180deg,transparent 0%,rgba(255,245,195,.24) 42%,rgba(255,238,170,.14) 58%,transparent 100%);
+     filter:blur(32px);animation:sb1 17s ease-in-out infinite alternate}
+.sh2{top:40%;height:130px;
+     background:linear-gradient(180deg,transparent,rgba(255,225,210,.18) 45%,rgba(248,215,200,.10) 58%,transparent);
+     filter:blur(28px);animation:sb2 23s ease-in-out infinite alternate-reverse}
+.sh3{bottom:15%;height:150px;
+     background:linear-gradient(180deg,transparent,rgba(220,210,255,.16) 44%,rgba(210,198,248,.08) 58%,transparent);
+     filter:blur(30px);animation:sb3 20s ease-in-out infinite alternate}
+.sh4{top:65%;height:100px;
+     background:linear-gradient(180deg,transparent,rgba(255,230,180,.14) 48%,transparent);
+     filter:blur(24px);animation:sb4 15s ease-in-out infinite alternate-reverse}
+
+@keyframes sb1{0%{transform:translateY(0) skewX(-4deg);opacity:.85}100%{transform:translateY(-48px) skewX(5deg);opacity:1}}
+@keyframes sb2{0%{transform:translateY(0) skewX(6deg);opacity:.75}100%{transform:translateY(56px) skewX(-5deg);opacity:.95}}
+@keyframes sb3{0%{transform:translateY(0) skewX(-3deg);opacity:.8}100%{transform:translateY(-38px) skewX(6deg);opacity:1}}
+@keyframes sb4{0%{transform:translateY(0) skewX(4deg);opacity:.7}100%{transform:translateY(42px) skewX(-4deg);opacity:.9}}
+
+/* floating gold dust */
+.dust-wrap{position:absolute;inset:0;pointer-events:none}
+.dust{position:absolute;border-radius:50%;
+      background:radial-gradient(circle,rgba(210,168,50,.34) 0%,transparent 70%);
+      animation:dust-rise var(--d,7s) var(--dl,0s) ease-in infinite}
+@keyframes dust-rise{0%{transform:translateY(0) scale(1);opacity:0}12%{opacity:.24}85%{opacity:.08}100%{transform:translateY(-140px) scale(.25);opacity:0}}
+
+/* subtle background starlight */
+.bg-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.bg-star{
+  position:absolute;
+  left:0;
+  top:0;
+  width:var(--s,2.2px);
+  height:var(--s,2.2px);
+  border-radius:50%;
+  transform:translate(calc(var(--x,0%) - 50%),calc(var(--y,0%) - 50%));
+  background:radial-gradient(circle,rgba(255,249,224,.50) 0%,rgba(255,225,140,.25) 46%,rgba(255,225,140,0) 76%);
+  filter:drop-shadow(0 0 5px rgba(255,220,138,.14));
+  animation:bg-twinkle var(--d,5.4s) var(--dl,0s) ease-in-out infinite;
+}
+.bg-star::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:calc(var(--s,2.2px) * 2.6);
+  height:1px;
+  transform:translate(-50%,-50%);
+  background:linear-gradient(90deg,rgba(255,230,160,0),rgba(255,236,178,.26),rgba(255,230,160,0));
+  opacity:.22;
+}
+@keyframes bg-twinkle{
+  0%{opacity:.05;transform:translate(calc(var(--x,0%) - 50%),calc(var(--y,0%) - 50%)) scale(.72)}
+  34%{opacity:.30;transform:translate(calc(var(--x,0%) - 50%),calc(var(--y,0%) - 50% - var(--dy,0.8px))) scale(1.1)}
+  62%{opacity:.14;transform:translate(calc(var(--x,0%) - 50%),calc(var(--y,0%) - 50%)) scale(.9)}
+  100%{opacity:.07;transform:translate(calc(var(--x,0%) - 50%),calc(var(--y,0%) - 50% + var(--dy,0.8px))) scale(.76)}
+}
+
+/* subtle paper texture overlay */
+#root::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:.22;
+}
+
+/* page */
+.page{position:relative;z-index:1;max-width:none;width:min(2360px,calc(100vw - 10px));margin:0 auto;padding:30px 5px 112px}
+
+/* card — gradient iridescent border via ::before, no hard line */
+.gc{
+  background:var(--card);
+  border:none;
+  border-radius:var(--r);
+  position:relative;
+  isolation:isolate;
+  box-shadow:
+    0 4px 24px rgba(160,120,40,.06),
+    0 1px 4px rgba(160,120,40,.04);
+}
+/* the animated gradient border — 1 px ring, colours shift like silk */
+.gc::before{
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:calc(var(--r) + 1px);
+  background:linear-gradient(
+    135deg,
+    rgba(248,218,105,.44)  0%,
+    rgba(208,188,252,.34)  22%,
+    rgba(248,175,155,.36) 44%,
+    rgba(168,215,238,.30) 62%,
+    rgba(255,232,155,.40)  80%,
+    rgba(248,218,105,.44)100%
+  );
+  background-size:280% 280%;
+  animation:bd-drift 11s ease-in-out infinite alternate;
+  z-index:-1;
+}
+@keyframes bd-drift{
+  0%  {background-position:0%   0%;  opacity:.36}
+  30% {background-position:60%  100%;opacity:.54}
+  65% {background-position:100% 40%; opacity:.42}
+  100%{background-position:20%  100%;opacity:.5}
+}
+
+/* ── section heading ─────────────────────────────────── */
+.sh{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sh-text{font-family:var(--serif);font-size:14px;color:var(--gold);letter-spacing:.05em;font-style:italic}
+.sh-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(190,148,55,.24),transparent)}
+.sh-sub{font-size:11px;color:var(--t3);font-style:normal;font-family:var(--body)}
+
+/* ── header ──────────────────────────────────────────── */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:20px;flex-wrap:wrap}
+.hdr-left{position:relative}
+.hdr-left h1{font-family:var(--serif);font-size:50px;font-weight:600;color:var(--gold);letter-spacing:.03em;line-height:1;position:relative}
+.hdr-left h1::after{content:'';position:absolute;bottom:-4px;left:0;width:70%;height:2px;background:linear-gradient(90deg,var(--gold3),transparent)}
+.hdr-left .srv{font-size:11px;color:var(--t3);margin-top:10px;letter-spacing:.04em}
+.hdr-stats{display:flex;gap:12px}
+.stat-card{padding:16px 26px;min-width:160px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(220,180,60,.08) 0%,transparent 70%)}
+.stat-card .lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.stat-card .val{font-family:var(--serif);font-size:34px;color:var(--gold);line-height:1}
+.stat-card .unit{font-size:13px;color:var(--t2);margin-left:4px}
+
+/* ── month chart ─────────────────────────────────────── */
+.month-wrap{padding:18px 20px;margin-bottom:18px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.bar-lbl{font-size:11px;color:var(--t2);min-width:38px;text-align:right}
+.bar-track{flex:1;height:8px;background:rgba(160,120,40,.07);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;position:relative;transition:width .9s cubic-bezier(.4,0,.2,1)}
+.bar-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:20px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5));animation:shimmer 2.5s infinite}
+@keyframes shimmer{0%{opacity:0;transform:translateX(-10px)}50%{opacity:1}100%{opacity:0;transform:translateX(5px)}}
+.bar-val{font-size:11px;color:var(--t3);min-width:34px}
+.chart-note{font-size:11px;color:var(--t4);margin-top:8px;padding-top:8px;border-top:1px solid rgba(160,120,40,.07)}
+
+/* ── mid grid ────────────────────────────────────────── */
+.mid-grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-bottom:18px;align-items:start}
+
+/* form */
+.form-wrap{padding:18px}
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:5px}
+.fi,.fsel{width:100%;padding:8px 11px;border:1px solid transparent;border-radius:var(--rs);color:var(--text);font-family:var(--body);font-size:13px;transition:background .15s; -webkit-appearance:none;appearance:none;
+  background:
+    linear-gradient(rgba(255,250,232,.86),rgba(255,250,232,.86)) padding-box,
+    var(--bd-grad-soft) border-box}
+.fi[type="datetime-local"]{-webkit-appearance:auto;appearance:auto;padding-right:8px}
+.fi[type="datetime-local"]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.9;filter:saturate(.7)}
+.fi:focus,.fsel:focus{outline:none;
+  background:
+    linear-gradient(rgba(255,252,238,.96),rgba(255,252,238,.96)) padding-box,
+    var(--bd-grad-strong) border-box}
+.fsel option{background:#fffae8}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mode-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-bottom:10px}
+.mode-dot{width:5px;height:5px;border-radius:50%;background:var(--gold3)}
+.mode-dot.edit{background:#c46040}
+.btn-create{width:100%;padding:11px;background:linear-gradient(100deg,var(--gold),var(--gold2),var(--gold3));border:none;border-radius:var(--r);color:#fff8e8;font-family:var(--body);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s;letter-spacing:.04em;text-shadow:0 1px 2px rgba(100,60,0,.18)}
+.btn-create:hover{opacity:.92}
+.btn-create:active{transform:scale(.98)}
+.btn-create:disabled{opacity:.5;cursor:default}
+.btn-cancel-edit{width:100%;padding:8px;border:1px solid transparent;border-radius:var(--r);color:var(--t2);font-family:var(--body);font-size:12px;cursor:pointer;margin-top:6px;
+  background:
+    linear-gradient(rgba(255,252,238,.52),rgba(255,252,238,.52)) padding-box,
+    var(--bd-grad-soft) border-box}
+
+/* table */
+.tbl-wrap{padding:18px}
+.tbl-desc{font-size:11px;color:var(--t3);margin-bottom:12px}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid transparent;white-space:nowrap;background:rgba(243,226,172,.1);border-image:var(--bd-grad-soft) 1}
+tbody tr{border-bottom:1px solid transparent;transition:background .12s;border-image:linear-gradient(90deg,rgba(206,164,78,.22),rgba(206,164,78,.06),rgba(206,164,78,.18)) 1}
+tbody tr:hover{background:rgba(240,220,160,.08)}
+tbody td{padding:10px 10px;vertical-align:middle}
+.type-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid transparent;border-image:var(--tag-bd-grad) 1}
+.task-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.35;max-width:300px}
+.task-time{font-size:11px;color:var(--t2);white-space:nowrap}
+.task-dur{font-size:10px;color:var(--t3)}
+.cd-active{font-size:12px;font-weight:600;color:var(--green);white-space:nowrap}
+.cd-upcoming{font-size:12px;color:var(--gold2);white-space:nowrap}
+.cd-done{font-size:11px;color:var(--t3)}
+.cd-over{font-size:11px;color:var(--red)}
+.cal-b{font-size:9px;padding:1px 5px;border-radius:3px;white-space:nowrap;display:block;margin-bottom:2px}
+.cal-ok{background:rgba(95,127,105,.08);color:var(--green)}
+.cal-fail{background:rgba(155,102,92,.07);color:var(--red)}
+.cal-none{color:var(--t4);font-size:10px}
+.rwd-xp{color:var(--blue);font-weight:600;font-size:11px}
+.rwd-w{color:var(--gold);font-weight:600;font-size:11px}
+.act-btns{display:flex;gap:5px;white-space:nowrap}
+.btn-t{padding:4px 10px;border-radius:5px;border:1px solid transparent;font-size:11px;font-family:var(--body);cursor:pointer;transition:background .12s}
+.btn-done-t{border-image:var(--bd-grad-green) 1;color:var(--green);background:linear-gradient(rgba(255,253,244,.46),rgba(255,253,244,.46)) padding-box}
+.btn-done-t:hover{background:rgba(95,127,105,.06)}
+.btn-edit-t{border-image:var(--bd-grad-soft) 1;color:var(--gold2);background:linear-gradient(rgba(255,253,244,.46),rgba(255,253,244,.46)) padding-box}
+.btn-edit-t:hover{background:rgba(178,154,103,.06)}
+.btn-del-t{border-image:var(--bd-grad-red) 1;color:var(--red);background:linear-gradient(rgba(255,253,244,.46),rgba(255,253,244,.46)) padding-box}
+.btn-del-t:hover{background:rgba(155,102,92,.06)}
+.empty-row td{text-align:center;padding:36px;color:var(--t3);font-size:13px;font-style:italic}
+@keyframes cfl{0%{box-shadow:0 0 0 0 rgba(58,110,72,.5)}70%{box-shadow:0 0 0 12px rgba(58,110,72,0)}100%{box-shadow:0 0 0 0 rgba(58,110,72,0)}}
+.flash-row{animation:cfl .55s ease-out}
+
+/* tags */
+.tags-wrap{padding:16px 18px;margin-top:14px}
+.tags-note{font-size:11px;color:var(--t3);margin-bottom:10px;font-style:italic}
+.tags-list{display:flex;flex-wrap:wrap;gap:7px}
+.tag-chip{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid transparent;border-image:var(--tag-bd-grad) 1;transition:opacity .12s,transform .1s;white-space:nowrap;font-weight:500}
+.tag-chip:hover{opacity:.8}
+.tag-chip:active{transform:scale(.96)}
+
+/* bottom grid */
+.bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.type-chart-wrap{padding:18px}
+.weekly-wrap{padding:18px}
+.day-block{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid transparent;border-image:linear-gradient(90deg,rgba(206,164,78,.22),rgba(206,164,78,.06),rgba(206,164,78,.18)) 1}
+.day-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.day-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.day-name{font-family:var(--serif);font-size:13px;color:var(--gold);font-style:italic}
+.day-date{font-size:11px;color:var(--t4)}
+.day-task{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;margin-bottom:4px;flex-wrap:wrap;border:1px solid transparent;
+  background:
+    linear-gradient(rgba(244,229,184,.14),rgba(244,229,184,.14)) padding-box,
+    var(--bd-grad-soft) border-box}
+.day-task:last-child{margin-bottom:0}
+.day-time{font-size:11px;color:var(--t2);white-space:nowrap;min-width:92px}
+.day-st{font-size:10px;padding:1px 6px;border-radius:10px;border:1px solid transparent;white-space:nowrap;border-image:var(--tag-bd-grad) 1}
+.day-st.done{color:var(--green);border-image:var(--bd-grad-green) 1;background:rgba(95,127,105,.05)}
+.day-st.active{color:var(--gold2);background:rgba(178,154,103,.05)}
+.day-st.upcoming{color:var(--t2)}
+.day-course{font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(190,148,55,.11);color:var(--gold2);border:1px solid transparent;border-image:var(--tag-bd-grad) 1}
+.day-ttl{font-size:12px;color:var(--text);flex:1}
+.day-empty{font-size:12px;color:var(--t4);padding:4px 0;font-style:italic}
+
+/* float widget */
+.float-widget{position:fixed;bottom:24px;right:28px;z-index:50;width:270px}
+.float-inner{
+  padding:0;
+  border:1px solid transparent;
+  background:
+    linear-gradient(rgba(255,251,232,.97),rgba(255,251,232,.97)) padding-box,
+    var(--bd-grad-soft) border-box;
+  border-radius:var(--r);box-shadow:0 4px 24px rgba(160,120,40,.12);overflow:hidden;
+}
+.float-top{padding:14px 14px 10px;position:relative}
+.float-top::before{content:'';position:absolute;top:-30px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(240,200,80,.14) 0%,transparent 70%);pointer-events:none}
+.float-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.float-title-txt{font-family:var(--serif);font-size:12px;color:var(--gold);font-style:italic;display:flex;align-items:center;gap:6px}
+.float-min{background:none;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0;line-height:1}
+.float-row{display:flex;gap:12px;margin-bottom:10px}
+.float-col .lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.float-col .val{font-size:14px;font-weight:600;color:var(--text);font-family:var(--serif)}
+.float-col .val.cd{color:var(--green)}
+.float-divider{height:1px;background:linear-gradient(90deg,rgba(190,148,55,.18),rgba(190,148,55,.07),transparent);margin-bottom:10px}
+.float-info .info-lbl{font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.float-info .info-val{font-size:12px;color:var(--text);margin-bottom:8px;line-height:1.4}
+.float-mini{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.float-mini .lbl{font-size:11px;color:var(--t2);font-style:italic;font-family:var(--serif)}
+.float-mini .cd{font-size:12px;font-weight:600;color:var(--green)}
+
+/* cursor starlight */
+.cursor-stars{
+  position:fixed;
+  inset:0;
+  z-index:95;
+  pointer-events:none;
+  overflow:hidden;
+}
+.cursor-star{
+  position:fixed;
+  left:0;
+  top:0;
+  width:var(--sz,14px);
+  height:var(--sz,14px);
+  transform:translate(calc(var(--x,0px) - 50%),calc(var(--y,0px) - 50%));
+  opacity:0;
+  animation:star-pop var(--dur,1.05s) cubic-bezier(.16,.84,.28,1) forwards;
+  filter:drop-shadow(0 0 12px rgba(255,226,150,.72));
+}
+.cursor-star::before{
+  content:attr(data-char);
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:hsl(var(--h,46) 96% 80%);
+  font-size:calc(var(--sz,14px) + 2px);
+  line-height:1;
+  text-shadow:
+    0 0 8px rgba(255,242,198,.88),
+    0 0 18px rgba(255,214,112,.68),
+    0 0 28px rgba(255,199,90,.42);
+}
+.cursor-star::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:calc(var(--sz,14px) * .8);
+  height:calc(var(--sz,14px) * .8);
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,248,210,.78) 0%,rgba(255,220,130,.28) 42%,rgba(255,220,130,0) 72%);
+  filter:blur(.8px);
+}
+@keyframes star-pop{
+  0%{
+    opacity:0;
+    transform:
+      translate(calc(var(--x,0px) - 50%),calc(var(--y,0px) - 50%))
+      scale(.28)
+      rotate(0deg);
+  }
+  18%{
+    opacity:.98;
+  }
+  100%{
+    opacity:0;
+    transform:
+      translate(calc(var(--x,0px) - 50% + var(--dx,0px)),calc(var(--y,0px) - 50% - var(--dy,12px)))
+      scale(1.42)
+      rotate(var(--rot,35deg));
+  }
+}
+
+/* candle flame animation */
+@keyframes flame{0%,100%{transform:scaleX(1) scaleY(1)}25%{transform:scaleX(.9) scaleY(1.05)}75%{transform:scaleX(1.08) scaleY(.95)}}
+.flame-anim{transform-origin:50% 100%;animation:flame 1.8s ease-in-out infinite}
+
+/* confirm */
+.covl{position:fixed;inset:0;background:rgba(30,20,5,.35);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.cbox{border:1px solid transparent;border-radius:var(--r);padding:26px 22px;width:100%;max-width:280px;text-align:center;box-shadow:0 8px 40px rgba(120,80,20,.2);
+  background:
+    linear-gradient(var(--card),var(--card)) padding-box,
+    var(--bd-grad-soft) border-box}
+.c-ttl{font-family:var(--serif);font-size:16px;color:var(--gold);margin-bottom:8px;font-style:italic}
+.c-body{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+.c-btns{display:flex;gap:10px}
+.c-yes{flex:1;padding:10px;border-radius:var(--rs);background:rgba(160,56,40,.1);border:1px solid transparent;border-image:var(--bd-grad-red) 1;color:var(--red);font-family:var(--body);font-size:13px;cursor:pointer}
+.c-no{flex:1;padding:10px;border-radius:var(--rs);background:rgba(190,148,55,.08);border:1px solid transparent;border-image:var(--bd-grad-soft) 1;color:var(--t2);font-family:var(--body);font-size:13px;cursor:pointer}
+
+/* toast */
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);border:1px solid transparent;border-image:var(--bd-grad-soft) 1;border-radius:22px;padding:9px 22px;font-size:13px;color:var(--text);z-index:200;box-shadow:0 4px 20px rgba(120,80,20,.2);white-space:nowrap;animation:tin .25s cubic-bezier(.4,0,.2,1);
+  background:rgba(255,251,232,.97)}
+.toast.s{border-image:var(--bd-grad-green) 1;color:var(--green)}
+.toast.e{border-image:var(--bd-grad-red) 1;color:var(--red)}
+@keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* loading */
+.spin-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:18px;position:relative;z-index:1}
+.ring{width:44px;height:44px;border:3px solid transparent;border-radius:50%;animation:rot .8s linear infinite;border-image:var(--bd-grad-strong) 1}
+@keyframes rot{to{transform:rotate(360deg)}}
+.spin-lbl{font-family:var(--serif);font-size:14px;color:var(--gold);letter-spacing:.06em;font-style:italic}
+
+@media(max-width:900px){.mid-grid{grid-template-columns:1fr}.bot-grid{grid-template-columns:1fr}.hdr-stats{flex-wrap:wrap}}
+@media(max-width:600px){.page{padding:12px 6px 80px;width:calc(100vw - 8px)}.task-title{max-width:160px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+/* ── constants ───────────────────────────────────────── */
+const VTYPES = ['course','review','skill','knowledge','homework'];
+const safeType = t => VTYPES.includes(t) ? t : 'course';
+const SYNC_WL  = ['pending','syncing','done','failed','skipped'];
+const safeSync = s => SYNC_WL.includes(s) ? s : 'pending';
+const TC = {
+  course:   {c:'#9b8d72',bg:'rgba(200,170,80,.13)',lbl:'课程学习'},
+  review:   {c:'#718997',bg:'rgba(96,127,146,.12)',lbl:'复习巩固'},
+  skill:    {c:'#738a77',bg:'rgba(95,127,105,.12)',lbl:'技能拓展'},
+  knowledge:{c:'#968976',bg:'rgba(138,122,98,.12)',lbl:'知识库搭建'},
+  homework: {c:'#a08b7a',bg:'rgba(155,122,98,.12)',lbl:'做作业'},
+};
+const gt = t => TC[safeType(t)] ?? TC.course;
+const BARCOLS = ['#d2c4a1','#9bb0a5','#9fb3c1','#bfae97','#c8b29f','#b3aac4','#b0b0b8'];
+
+/* ── normalize ───────────────────────────────────────── */
+const normPlayer = p => { if(!p||typeof p!=='object') p={}; return {level:Number(p.level)||1,xp:Number(p.xp)||0,xp_target:p.xp_target!=null?Number(p.xp_target):null,wealth:Number(p.wealth)||0,streak:Number(p.streak)||0,total_done:Number(p.total_done)||0,total_minutes:Number(p.total_minutes)||0}; };
+const normQuest = q => { if(!q||typeof q!=='object'||q.id==null) return null; return {id:q.id,title:typeof q.title==='string'&&q.title?q.title:'(无标题)',task_type:safeType(q.task_type),course_name:typeof q.course_name==='string'?q.course_name:'',start:typeof q.start==='string'?q.start:'',end:typeof q.end==='string'?q.end:'',completed_at:q.completed_at??null,status:typeof q.status==='string'?q.status:'todo',reward_xp:q.reward_xp!=null?Number(q.reward_xp):null,reward_wealth:q.reward_wealth!=null?Number(q.reward_wealth):null,duration_minutes:q.duration_minutes!=null?Number(q.duration_minutes):null,label:q.label??'',calendar_sync_status:safeSync(q.calendar_sync_status),calendar_sync_message:typeof q.calendar_sync_message==='string'?q.calendar_sync_message:''}; };
+const normTag = t => { if(!t||typeof t!=='object'||t.id==null) return null; return {id:t.id,title:typeof t.title==='string'&&t.title?t.title:'(无标题)',task_type:safeType(t.task_type),course_name:typeof t.course_name==='string'?t.course_name:'',duration_minutes:t.duration_minutes!=null?Number(t.duration_minutes):0,uses:Number(t.uses)||0,label:t.label??''}; };
+const normCharts = c => {
+  if(!c||typeof c!=='object') return {days:[],day_minutes:[],type_minutes:{},course_minutes:[]};
+  return {
+    days:Array.isArray(c.days)?c.days.filter(Boolean):[],
+    day_minutes:Array.isArray(c.day_minutes)?c.day_minutes.map(Number):[],
+    type_minutes:(c.type_minutes&&typeof c.type_minutes==='object')?c.type_minutes:{},
+    course_minutes:Array.isArray(c.course_minutes)
+      ? c.course_minutes.map(it=>({
+          course_name:typeof it?.course_name==='string'&&it.course_name?it.course_name:'未命名课程',
+          minutes:Number(it?.minutes)||0,
+          sessions:Number(it?.sessions)||0
+        }))
+      : []
+  };
+};
+const normalize = raw => {
+  const s=(raw&&typeof raw==='object')?(raw.data??raw):{};
+  return {
+    server_time:typeof s.server_time==='string'?s.server_time:'',
+    player:normPlayer(s.player),
+    quests:Array.isArray(s.quests)?s.quests.map(normQuest).filter(Boolean):[],
+    quick_tags:Array.isArray(s.quick_tags)?s.quick_tags.map(normTag).filter(Boolean):[],
+    charts:normCharts(s.charts),
+    weekly_outline:Array.isArray(s.weekly_outline)?s.weekly_outline:[],
+    weekly:s.weekly??null,
+    reminders:Array.isArray(s.reminders)?s.reminders:[]
+  };
+};
+
+/* ── time helpers ────────────────────────────────────── */
+const toInput = s => (s??'').replace(' ','T').slice(0,16);
+const toAPI   = s => s.replace('T',' ');
+const nowPlus = m => { const d=new Date(Date.now()+m*60000); d.setSeconds(0,0); return d.toISOString().slice(0,16); };
+const parseT  = s => { if(!s) return null; const[dt,tm]=s.split(' '); if(!dt||!tm) return null; return new Date(`${dt}T${tm}:00`); };
+const fmtMs   = ms => { if(ms<=0) return '已结束'; const t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60; return h>0?`${h}小时${m}分`:`${m}分${s<10?'0'+s:s}秒`; };
+const fmtAgo  = ms => { if(ms<=0) return '刚刚'; const t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60); return h>0?`${h}小时${m}分`:`${m}分`; };
+const fmtTime = s => { if(!s) return ''; const[dt,tm]=s.split(' '); return `${tm??''} ${(dt??'').slice(5)}`; };
+
+/* ── API ─────────────────────────────────────────────── */
+const hdr = {'Content-Type':'application/json'};
+const API = {
+  state:  ()     => fetch('/api/state').then(r=>r.json()),
+  addQ:   b      => fetch('/api/quests',{method:'POST',headers:hdr,body:JSON.stringify(b)}).then(r=>r.json()),
+  editQ:  (id,b) => fetch(`/api/quests/${id}`,{method:'PATCH',headers:hdr,body:JSON.stringify(b)}).then(r=>r.json()),
+  delQ:   id     => fetch(`/api/quests/${id}`,{method:'DELETE'}).then(r=>r.json()),
+  complQ: id     => fetch(`/api/quests/${id}/complete`,{method:'POST'}).then(r=>r.json()),
+  useTag: (id,b) => fetch(`/api/tags/${id}/create`,{method:'POST',headers:hdr,body:JSON.stringify(b)}).then(r=>r.json()),
+};
+
+/* ── Hand-drawn SVG Icons ────────────────────────────── */
+
+const CandleIcon = ({size=28,animate=true}) => (
+  <svg width={size} height={size*1.6} viewBox="0 0 28 44" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    {/* glow behind flame */}
+    <ellipse cx="14" cy="10" rx="7" ry="8" fill="rgba(240,200,80,.18)"/>
+    {/* flame outer */}
+    <path className={animate?'flame-anim':''} d="M14 3 C12 7 10 9.5 12.5 13 C13.2 14.2 14.8 14.2 15.5 13 C18 9.5 16 7 14 3Z" fill="#f0c855" stroke="#c89020" strokeWidth="0.7"/>
+    {/* flame inner highlight */}
+    <path className={animate?'flame-anim':''} d="M14 6 C13.2 8 12.5 9.5 13.5 11.5" stroke="rgba(255,240,180,.8)" strokeWidth="0.8" fill="none"/>
+    {/* wick */}
+    <line x1="14" y1="13" x2="14" y2="16" stroke="#2a1c06" strokeWidth="1.2"/>
+    {/* candle body */}
+    <rect x="9" y="16" width="10" height="20" rx="2.5" fill="#fdf5d8" stroke="#c8980c" strokeWidth="1.2"/>
+    {/* subtle wax texture lines */}
+    <line x1="9" y1="22" x2="19" y2="22" stroke="rgba(200,160,40,.15)" strokeWidth="0.6"/>
+    <line x1="9" y1="28" x2="19" y2="28" stroke="rgba(200,160,40,.15)" strokeWidth="0.6"/>
+    {/* wax drip left */}
+    <path d="M9 19 C7.5 21 7.5 23.5 9 23.5" stroke="#e8d090" strokeWidth="1" fill="none"/>
+    {/* wax drip right */}
+    <path d="M19 22 C20.5 24 20.5 26.5 19 26.5" stroke="#e8d090" strokeWidth="1" fill="none"/>
+    {/* base cup */}
+    <path d="M6 36 C6 34.5 22 34.5 22 36 L23 40 C23 41.2 5 41.2 5 40 Z" fill="#c8980c" stroke="#a07010" strokeWidth="1"/>
+    {/* cup highlight */}
+    <line x1="8" y1="37" x2="20" y2="37" stroke="rgba(255,220,100,.4)" strokeWidth="0.8"/>
+    {/* base shadow */}
+    <ellipse cx="14" cy="42" rx="9" ry="1.5" fill="rgba(120,80,20,.1)" stroke="none"/>
+  </svg>
+);
+
+const BookIcon = ({size=22}) => (
+  <svg width={size*1.2} height={size} viewBox="0 0 42 34" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    {/* left page */}
+    <path d="M21 5 C17 4 9.5 5.5 7 8 L7 30 C9.5 28 17 27 21 28Z" fill="#fdf5d8" stroke="#c8980c" strokeWidth="1.2"/>
+    {/* right page */}
+    <path d="M21 5 C25 4 32.5 5.5 35 8 L35 30 C32.5 28 25 27 21 28Z" fill="#faf0c8" stroke="#c8980c" strokeWidth="1.2"/>
+    {/* spine shadow */}
+    <path d="M21 5 L21 28" stroke="#a07010" strokeWidth="1.8"/>
+    {/* light on cover */}
+    <ellipse cx="21" cy="5" rx="4" ry="1.5" fill="rgba(240,210,100,.35)" stroke="none"/>
+    {/* left lines */}
+    <line x1="11" y1="12" x2="18.5" y2="11.5" stroke="#c8980c" strokeWidth="0.7" opacity=".5"/>
+    <line x1="11" y1="16" x2="18.5" y2="15.5" stroke="#c8980c" strokeWidth="0.7" opacity=".5"/>
+    <line x1="11" y1="20" x2="18.5" y2="19.5" stroke="#c8980c" strokeWidth="0.7" opacity=".5"/>
+    <line x1="11" y1="24" x2="17" y2="23.5" stroke="#c8980c" strokeWidth="0.7" opacity=".4"/>
+    {/* right lines */}
+    <line x1="23.5" y1="12" x2="31" y2="11.5" stroke="#c8980c" strokeWidth="0.7" opacity=".5"/>
+    <line x1="23.5" y1="16" x2="31" y2="15.5" stroke="#c8980c" strokeWidth="0.7" opacity=".5"/>
+    <line x1="23.5" y1="20" x2="31" y2="19.5" stroke="#c8980c" strokeWidth="0.7" opacity=".4"/>
+    {/* small star on right page */}
+    <path d="M28 23 L28.5 24.3 L29.8 24.3 L28.8 25.1 L29.2 26.4 L28 25.6 L26.8 26.4 L27.2 25.1 L26.2 24.3 L27.5 24.3 Z" fill="#c8980c" opacity=".4"/>
+  </svg>
+);
+
+const WaveDecor = ({width=120,height=18}) => (
+  <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none">
+    <path d={`M0 ${height/2} C${width*.1} ${height*.15} ${width*.2} ${height*.85} ${width*.35} ${height/2} C${width*.5} ${height*.15} ${width*.65} ${height*.85} ${width*.8} ${height/2} C${width*.9} ${height*.25} ${width*.95} ${height*.4} ${width} ${height/2}`}
+      stroke="rgba(190,148,55,.35)" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    <path d={`M0 ${height*.65} C${width*.12} ${height*.3} ${width*.25} ${height*.9} ${width*.4} ${height*.6} C${width*.55} ${height*.3} ${width*.7} ${height*.9} ${width*.85} ${height*.6} C${width*.93} ${height*.4} ${width*.97} ${height*.5} ${width} ${height*.6}`}
+      stroke="rgba(190,148,55,.18)" strokeWidth="0.8" strokeLinecap="round" fill="none"/>
+  </svg>
+);
+
+const SparkleDecor = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M8 1 L8.8 6.2 L14 8 L8.8 9.8 L8 15 L7.2 9.8 L2 8 L7.2 6.2 Z" fill="#c8980c" opacity=".6"/>
+    <path d="M3 3 L3.4 5.2 L5.5 5.5 L3.4 5.8 L3 8 L2.6 5.8 L0.5 5.5 L2.6 5.2 Z" fill="#e8be40" opacity=".5"/>
+  </svg>
+);
+
+const LightRaysDecor = () => (
+  <svg width="60" height="60" viewBox="0 0 60 60" fill="none" style={{position:'absolute',top:-10,right:10,opacity:.25,pointerEvents:'none'}}>
+    {[0,30,60,90,120,150,180,210,240,270,300,330].map((angle,i)=>(
+      <line key={i}
+        x1="30" y1="30"
+        x2={30+Math.cos(angle*Math.PI/180)*28}
+        y2={30+Math.sin(angle*Math.PI/180)*28}
+        stroke="#c8980c" strokeWidth={i%3===0?"1.2":"0.6"} strokeLinecap="round"/>
+    ))}
+    <circle cx="30" cy="30" r="4" fill="rgba(240,200,80,.5)" stroke="#c8980c" strokeWidth="0.8"/>
+  </svg>
+);
+
+/* ── Silk background ─────────────────────────────────── */
+const SilkBg = () => {
+  const dust = useRef(Array.from({length:18},(_,i)=>({
+    id:i, left:Math.random()*100, bottom:Math.random()*35,
+    size:Math.random()*4+1.5, d:5+Math.random()*6, dl:Math.random()*7
+  }))).current;
+  const stars = useRef(Array.from({length:54},(_,i)=>({
+    id:i,
+    x:Math.random()*100,
+    y:Math.random()*100,
+    s:1.1+Math.random()*2.6,
+    d:3.8+Math.random()*4.7,
+    dl:Math.random()*6.8,
+    dy:(Math.random()>.5?1:-1)*(0.4+Math.random()*1.4),
+  }))).current;
+  return (
+    <div className="silk-bg">
+      <div className="sb sb1"/><div className="sb sb2"/><div className="sb sb3"/>
+      <div className="sb sb4"/><div className="sb sb5"/><div className="sb sb6"/>
+      <div className="sband sh1"/><div className="sband sh2"/>
+      <div className="sband sh3"/><div className="sband sh4"/>
+      <div className="bg-stars">
+        {stars.map(st=>(
+          <div
+            key={st.id}
+            className="bg-star"
+            style={{'--x':`${st.x}%`,'--y':`${st.y}%`,'--s':`${st.s.toFixed(2)}px`,'--d':`${st.d.toFixed(2)}s`,'--dl':`${st.dl.toFixed(2)}s`,'--dy':`${st.dy.toFixed(2)}px`}}
+          />
+        ))}
+      </div>
+      <div className="dust-wrap">
+        {dust.map(p=><div key={p.id} className="dust" style={{left:`${p.left}%`,bottom:`${p.bottom}%`,width:p.size,height:p.size,'--d':`${p.d}s`,'--dl':`${p.dl}s`}}/>)}
+      </div>
+    </div>
+  );
+};
+
+/* ── Toast ───────────────────────────────────────────── */
+const Toast = ({msg,type,onDone}) => { useEffect(()=>{const t=setTimeout(onDone,2300);return()=>clearTimeout(t);},[onDone]); return <div className={`toast ${type==='success'?'s':'e'}`}>{msg}</div>; };
+
+/* ── Confirm ─────────────────────────────────────────── */
+const Confirm = ({msg,onYes,onNo}) => (
+  <div className="covl" onClick={onNo}>
+    <div className="cbox" onClick={e=>e.stopPropagation()}>
+      <div className="c-ttl">确认删除</div>
+      <div className="c-body">{msg}</div>
+      <div className="c-btns"><button className="c-yes" onClick={onYes}>确认删除</button><button className="c-no" onClick={onNo}>取消</button></div>
+    </div>
+  </div>
+);
+
+/* ── SectionHeading ──────────────────────────────────── */
+const SH = ({icon,children,sub}) => (
+  <div className="sh">
+    {icon}
+    <span className="sh-text">{children}</span>
+    {sub&&<span className="sh-sub">{sub}</span>}
+    <div className="sh-line"/>
+    <WaveDecor width={80} height={14}/>
+  </div>
+);
+
+/* ── Header ──────────────────────────────────────────── */
+const Header = ({player:p={},serverTime}) => (
+  <div className="hdr">
+    <div className="hdr-left">
+      <LightRaysDecor/>
+      <h1>财富流通中心</h1>
+      <div className="srv" style={{display:'flex',alignItems:'center',gap:6,marginTop:8}}>
+        <WaveDecor width={40} height={10}/>
+        <span style={{fontSize:11,color:'var(--t3)'}}>服务器时间：{serverTime||'—'}</span>
+      </div>
+    </div>
+    <div className="hdr-stats">
+      <div className="gc stat-card">
+        <div className="lbl">连续学习</div>
+        <div className="val">{p.streak??0}<span className="unit">天</span></div>
+      </div>
+      <div className="gc stat-card">
+        <div className="lbl">总学习时长</div>
+        <div className="val">{p.total_minutes??0}<span className="unit">分钟</span></div>
+      </div>
+    </div>
+  </div>
+);
+
+/* ── MonthChart ──────────────────────────────────────── */
+const MonthChart = ({charts}) => {
+  const {days=[],day_minutes=[],course_minutes=[]} = charts??{};
+  const maxD=Math.max(...day_minutes,1);
+  const maxC=Math.max(...course_minutes.map(x=>Number(x?.minutes)||0),1);
+  return (
+    <div className="gc month-wrap">
+      <SH icon={<SparkleDecor/>}>最近 1 个月学习时长</SH>
+      {days.length===0&&<div className="chart-note">暂无数据</div>}
+      {days.map((d,i)=>(
+        <div key={d} className="bar-row">
+          <div className="bar-lbl">{(d??'').slice(5)}</div>
+          <div className="bar-track"><div className="bar-fill" style={{width:`${((day_minutes[i]??0)/maxD)*100}%`,background:'linear-gradient(90deg,#baa36f,#d6c59d)'}}/></div>
+          <div className="bar-val">{day_minutes[i]??0}m</div>
+        </div>
+      ))}
+      <div className="chart-note">课程学习数据标签（最近 30 天）</div>
+      {course_minutes.length===0
+        ? <div style={{fontSize:11,color:'var(--t4)',fontStyle:'italic',marginTop:4}}>最近 30 天暂无已完成课程数据。</div>
+        : course_minutes.slice(0,6).map((item,i)=>{
+            const c=item.course_name||'未命名课程';
+            const m=Number(item.minutes)||0;
+            return <div key={c} className="bar-row" style={{marginTop:3}}>
+              <div className="bar-lbl" style={{minWidth:72,fontSize:10}} title={c}>{c.length>10?c.slice(0,10)+'…':c}</div>
+              <div className="bar-track" style={{height:6}}><div className="bar-fill" style={{width:`${(m/maxC)*100}%`,background:BARCOLS[i%BARCOLS.length]}}/></div>
+              <div className="bar-val">{m}m</div>
+            </div>;
+          })
+      }
+    </div>
+  );
+};
+
+/* ── CreateForm ──────────────────────────────────────── */
+const mkForm = q => q?.id
+  ? {task_type:safeType(q.task_type),course_name:q.course_name??'',title:q.title??'',start:toInput(q.start),end:toInput(q.end),write_calendar:false}
+  : {task_type:'course',course_name:'',title:'',start:nowPlus(0),end:nowPlus(60),write_calendar:true};
+
+const CreateForm = ({editQuest,onSave,onCancelEdit}) => {
+  const isEdit=!!editQuest?.id;
+  const [f,setF]=useState(()=>mkForm(editQuest));
+  const [busy,setBusy]=useState(false);
+  const set=(k,v)=>setF(p=>({...p,[k]:v}));
+  const openPicker = e => {
+    const fn = e?.currentTarget?.showPicker;
+    if (typeof fn === 'function') {
+      try { fn.call(e.currentTarget); } catch {}
+    }
+  };
+  useEffect(()=>{setF(mkForm(editQuest));},[editQuest]);
+  const submit=async e=>{
+    e.preventDefault(); if(!f.title.trim()) return;
+    setBusy(true);
+    const body={task_type:f.task_type,course_name:f.course_name||undefined,title:f.title.trim(),start:toAPI(f.start),end:toAPI(f.end),write_calendar:f.write_calendar};
+    await onSave(body); setBusy(false);
+  };
+  return (
+    <div className="gc form-wrap">
+      <SH icon={<BookIcon size={18}/>}>创建学习任务</SH>
+      <form onSubmit={submit}>
+        <div className="fg"><label className="fl">学习类型</label>
+          <select className="fsel" value={f.task_type} onChange={e=>set('task_type',e.target.value)}>
+            {VTYPES.map(t=><option key={t} value={t}>{TC[t]?.lbl??t}</option>)}
+          </select></div>
+        <div className="fg"><label className="fl">课程/技能名称</label>
+          <input className="fi" value={f.course_name} onChange={e=>set('course_name',e.target.value)} placeholder="例如 CS584 / Python"/></div>
+        <div className="fg"><label className="fl">任务标题</label>
+          <input className="fi" value={f.title} onChange={e=>set('title',e.target.value)} placeholder="例如 Module 11：问答与可视化路径" required/></div>
+        <div className="frow">
+          <div className="fg"><label className="fl">开始时间</label>
+            <input className="fi" type="datetime-local" value={f.start} onChange={e=>set('start',e.target.value)} onClick={openPicker} required/></div>
+          <div className="fg"><label className="fl">结束时间</label>
+            <input className="fi" type="datetime-local" value={f.end} onChange={e=>set('end',e.target.value)} onClick={openPicker} required/></div>
+        </div>
+        <div className="mode-badge"><span className={`mode-dot ${isEdit?'edit':''}`}/>当前：{isEdit?'修改模式':'新建模式'}</div>
+        <button className="btn-create" type="submit" disabled={busy}>{busy?'保存中…':isEdit?'保存修改':'创建任务并写入苹果日历'}</button>
+        {isEdit&&<button className="btn-cancel-edit" type="button" onClick={onCancelEdit}>取消修改</button>}
+      </form>
+    </div>
+  );
+};
+
+/* ── QuickTags ───────────────────────────────────────── */
+const QuickTags = ({tags=[],onUse}) => (
+  <div className="gc tags-wrap">
+    <SH icon={<SparkleDecor/>} sub="（点击即可按历史时长自动创建下一次复习）">复习快捷标签</SH>
+    {tags.length===0
+      ? <div className="chart-note" style={{fontStyle:'italic'}}>暂无快捷标签</div>
+      : <div className="tags-list">
+          {tags.map(tag=>{const tc=gt(tag.task_type);return(
+            <div key={tag.id} className="tag-chip"
+              style={{color:tc.c,background:tc.bg}}
+              onClick={()=>onUse(tag)}>
+              {[tc.lbl,tag.course_name,tag.title].filter(Boolean).join(' | ')} · {tag.duration_minutes??0}m
+            </div>
+          );})}
+        </div>
+    }
+  </div>
+);
+
+/* ── Countdown (live) ────────────────────────────────── */
+const useNow = () => { const[now,setNow]=useState(Date.now); useEffect(()=>{const t=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(t);},[]);return now; };
+
+const Countdown = ({quest}) => {
+  const now=useNow();
+  if(quest.completed_at||quest.status==='done') return <span className="cd-done">已完成</span>;
+  const st=parseT(quest.start),en=parseT(quest.end);
+  if(!st||!en) return <span className="cd-done">—</span>;
+  if(now<st.getTime()) return <span className="cd-upcoming">还有 {fmtMs(st.getTime()-now)}</span>;
+  if(now<=en.getTime()) return <span className="cd-active">剩余 {fmtMs(en.getTime()-now)}</span>;
+  return <span className="cd-over">已结束</span>;
+};
+
+/* ── TaskTable ───────────────────────────────────────── */
+const TaskTable = ({quests=[],onComplete,onEdit,onDelete}) => {
+  const [flashId,setFlashId]=useState(null);
+  const handleDone=id=>{setFlashId(id);setTimeout(()=>setFlashId(null),600);onComplete(id);};
+  return (
+    <div className="gc tbl-wrap">
+      <SH icon={<BookIcon size={18}/>} sub="统一查看任务、倒计时、日历同步状态，可直接完成、修改、删除">任务与倒计时表</SH>
+      <div className="tbl-scroll">
+        <table>
+          <thead><tr><th>类型</th><th>标题</th><th>课程/技能</th><th>时间</th><th>倒计时</th><th>日历</th><th>奖励</th><th>操作</th></tr></thead>
+          <tbody>
+            {quests.length===0&&<tr className="empty-row"><td colSpan={8}>暂无任务 — 在左侧表单创建第一个任务</td></tr>}
+            {quests.map(q=>{
+              const tc=gt(q.task_type),done=!!q.completed_at||q.status==='done';
+              return(
+                <tr key={q.id} className={flashId===q.id?'flash-row':''} style={{opacity:done?.55:1}}>
+                  <td><span className="type-badge" style={{color:tc.c,background:tc.bg}}>{tc.lbl}</span></td>
+                  <td><div className="task-title">{q.title}</div></td>
+                  <td>{q.course_name&&<span className="type-badge" style={{color:tc.c,background:tc.bg,fontSize:10}}>{q.course_name}</span>}</td>
+                  <td><div className="task-time">{fmtTime(q.start)}</div><div className="task-time">{fmtTime(q.end)}</div>{q.duration_minutes&&<div className="task-dur">({q.duration_minutes}分钟)</div>}</td>
+                  <td><Countdown quest={q}/></td>
+                  <td><div>{q.calendar_sync_status==='done'&&<span className="cal-b cal-ok">已同步日历</span>}{q.calendar_sync_status==='failed'&&<span className="cal-b cal-fail">同步失败</span>}{(q.calendar_sync_status==='pending'||q.calendar_sync_status==='syncing')&&<span className="cal-b" style={{color:'var(--gold2)',background:'rgba(178,154,103,.05)',border:'1px solid rgba(178,154,103,.14)'}}>同步中</span>}{q.calendar_sync_status==='skipped'&&<span className="cal-none">未同步</span>}{q.status&&<span className="cal-b" style={{color:'var(--t3)',background:'rgba(120,80,20,.04)',border:'1px solid rgba(120,80,20,.07)'}}>{q.status}</span>}</div></td>
+                  <td><div>{q.reward_xp!=null&&<div className="rwd-xp">{q.reward_xp} XP</div>}{q.reward_wealth!=null&&<div className="rwd-w">{q.reward_wealth} ◈</div>}</div></td>
+                  <td><div className="act-btns">{!done&&<button className="btn-t btn-done-t" onClick={()=>handleDone(q.id)}>完成</button>}<button className="btn-t btn-edit-t" onClick={()=>onEdit(q)}>修改</button><button className="btn-t btn-del-t" onClick={()=>onDelete(q.id)}>删除</button></div></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+/* ── TypeChart ───────────────────────────────────────── */
+const TypeChart = ({charts}) => {
+  const {type_minutes={}}=charts??{},maxT=Math.max(...Object.values(type_minutes),1);
+  return(
+    <div className="gc type-chart-wrap">
+      <SH icon={<WaveDecor width={30} height={16}/>}>学习类型分布</SH>
+      {Object.keys(type_minutes).length===0
+        ? <div className="chart-note" style={{fontStyle:'italic'}}>暂无分布数据</div>
+        : Object.entries(type_minutes).map(([t,m],i)=>(
+            <div key={t} className="bar-row">
+              <div className="bar-lbl">{gt(t).lbl}</div>
+              <div className="bar-track"><div className="bar-fill" style={{width:`${(m/maxT)*100}%`,background:BARCOLS[i%BARCOLS.length]}}/></div>
+              <div className="bar-val">{m}m</div>
+            </div>
+          ))
+      }
+    </div>
+  );
+};
+
+/* ── WeeklyOutline ───────────────────────────────────── */
+const WeeklyOutline = ({weekly_outline=[]}) => {
+  const render=()=>{
+    if(!Array.isArray(weekly_outline)||weekly_outline.length===0) return <div className="day-empty">暂无本周数据</div>;
+    return weekly_outline.map((day,idx)=>{
+      const tasks=Array.isArray(day?.tasks)?day.tasks:[];
+      return(
+        <div key={`${day?.date??''}-${idx}`} className="day-block">
+          <div className="day-hdr"><span className="day-name">{day?.weekday??`第${idx+1}天`}</span><span className="day-date">{day?.date??''}</span></div>
+          {tasks.length===0
+            ? <div className="day-empty">暂无任务</div>
+            : tasks.map((t,i)=>{
+                const done=t?.status==='done'||!!t?.completed_at;
+                const sl=done?'done':'upcoming';
+                const st=done?'已完成':'待开始';
+                const start=t?.start_time??(t?.start?String(t.start).slice(11,16):'');
+                const end=t?.end_time??(t?.end?String(t.end).slice(11,16):'');
+                return(
+                  <div key={i} className="day-task">
+                    {(start||end)&&<span className="day-time">{start} – {end}</span>}
+                    <span className={`day-st ${sl}`}>{st}</span>
+                    {t?.course_name&&<span className="day-course">{t.course_name}</span>}
+                    <span className="day-ttl">{t?.title??''}</span>
+                  </div>
+                );
+              })
+          }
+        </div>
+      );
+    });
+  };
+  return(
+    <div className="gc weekly-wrap">
+      <SH icon={<SparkleDecor/>}>每周学习大纲</SH>
+      <div style={{fontSize:11,color:'var(--t3)',marginBottom:12,fontStyle:'italic'}}>按周一到周日查看本周学习安排。</div>
+      {render()}
+    </div>
+  );
+};
+
+/* ── FloatReminder ───────────────────────────────────── */
+const FloatReminder = ({quests=[]}) => {
+  const now=useNow();
+  const [mini,setMini]=useState(false);
+  const isDone=q=>q?.status==='done'||!!q?.completed_at;
+  const active=quests.find(q=>!isDone(q)&&parseT(q.start)?.getTime()<=now&&parseT(q.end)?.getTime()>=now);
+  const upcoming=quests.filter(q=>!isDone(q)&&parseT(q.start)?.getTime()>now).sort((a,b)=>parseT(a.start)?.getTime()-parseT(b.start)?.getTime())[0];
+  const lastDone=quests.filter(isDone).map(q=>parseT(q.completed_at||q.end||q.start)).filter(Boolean).sort((a,b)=>b.getTime()-a.getTime())[0];
+  const cdLabel=active?fmtMs(parseT(active.end).getTime()-now):'—';
+  const idleLabel=active?'进行中':(lastDone?fmtAgo(now-lastDone.getTime()):'暂无记录');
+  if(mini) return(
+    <div className="float-widget">
+      <div className="float-inner" style={{cursor:'pointer'}} onClick={()=>setMini(false)}>
+        <div className="float-mini">
+          <span className="lbl">学习悬浮提醒</span>
+          <span className="cd">{active?cdLabel:'无进行中'}</span>
+        </div>
+      </div>
+    </div>
+  );
+  return(
+    <div className="float-widget">
+      <div className="float-inner">
+        <div className="float-top">
+          <div className="float-title">
+            <span className="float-title-txt"><CandleIcon size={20} animate={!!active}/>学习悬浮提醒</span>
+            <button className="float-min" onClick={()=>setMini(true)}>—</button>
+          </div>
+          <div className="float-row">
+            <div className="float-col"><div className="lbl">本次学习剩余</div><div className={`val ${active?'cd':''}`}>{cdLabel}</div></div>
+            <div className="float-col"><div className="lbl">未学习时长</div><div className="val">{idleLabel}</div></div>
+          </div>
+          <div className="float-divider"/>
+          <div className="float-info">
+            <div className="info-lbl">当前</div>
+            <div className="info-val">{active?.title??'无进行中任务'}</div>
+            <div className="info-lbl">下次学习</div>
+            <div className="info-val">{upcoming?`${(upcoming.start??'').slice(11,16)} ${upcoming.title??''}`:'暂无待学习任务'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── CursorStars ─────────────────────────────────────── */
+const CursorStars = () => {
+  const hostRef = useRef(null);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+
+    const finePointer = window.matchMedia('(pointer:fine)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!finePointer || reducedMotion) return;
+
+    let lastX = 0;
+    let lastY = 0;
+    let lastAt = 0;
+    let starCount = 0;
+    const STAR_CHARS = ['✦','✧','✶','✹'];
+
+    const spawnStar = (x, y) => {
+      const el = document.createElement('span');
+      el.className = 'cursor-star';
+      const dur = 0.82 + Math.random() * 0.62;
+      el.dataset.char = STAR_CHARS[(Math.random() * STAR_CHARS.length) | 0];
+      el.style.setProperty('--x', `${x.toFixed(1)}px`);
+      el.style.setProperty('--y', `${y.toFixed(1)}px`);
+      el.style.setProperty('--dx', `${Math.round((Math.random() - 0.5) * 46)}px`);
+      el.style.setProperty('--dy', `${Math.round(16 + Math.random() * 34)}px`);
+      el.style.setProperty('--sz', `${(5.5 + Math.random() * 9.3).toFixed(1)}px`);
+      el.style.setProperty('--dur', `${dur.toFixed(2)}s`);
+      el.style.setProperty('--rot', `${Math.round((Math.random() - 0.5) * 180)}deg`);
+      el.style.setProperty('--h', `${38 + Math.round(Math.random() * 26)}`);
+      host.appendChild(el);
+      starCount += 1;
+
+      window.setTimeout(() => {
+        if (el.parentNode) {
+          el.parentNode.removeChild(el);
+          starCount = Math.max(0, starCount - 1);
+        }
+      }, Math.round(dur * 1000) + 140);
+    };
+
+    const onMove = e => {
+      const now = performance.now();
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      const dist = Math.hypot(dx, dy);
+      if (now - lastAt < 12 && dist < 6) return;
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+      lastAt = now;
+
+      const burst = dist > 34 ? 5 : 3;
+      for (let i = 0; i < burst; i += 1) {
+        spawnStar(
+          e.clientX + (Math.random() - 0.5) * 24,
+          e.clientY + (Math.random() - 0.5) * 18
+        );
+      }
+
+      // Hard cap to avoid node buildup during long sessions.
+      if (starCount > 220) {
+        const nodes = host.querySelectorAll('.cursor-star');
+        const removeCount = Math.max(0, nodes.length - 160);
+        for (let i = 0; i < removeCount; i += 1) {
+          nodes[i]?.remove();
+          starCount = Math.max(0, starCount - 1);
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  return <div className="cursor-stars" ref={hostRef} aria-hidden="true"/>;
+};
+
+/* ── App ─────────────────────────────────────────────── */
+function App(){
+  const[data,setData]=useState(null);
+  const[loading,setLoad]=useState(true);
+  const[toast,setToast]=useState(null);
+  const[confirm,setConf]=useState(null);
+  const[editQ,setEditQ]=useState(null);
+  const loadSeqRef=useRef(0),mutatingRef=useRef(false);
+  const toast$=useCallback((msg,type='success')=>setToast({msg,type,k:Date.now()}),[]);
+
+  const load=useCallback(async(fromMutation=false)=>{
+    if(!fromMutation&&mutatingRef.current) return;
+    const seq=++loadSeqRef.current;
+    try{const r=await API.state();if(seq!==loadSeqRef.current) return;setData(normalize(r));}
+    catch{if(seq===loadSeqRef.current) toast$('加载失败，请检查连接','error');}
+    finally{if(seq===loadSeqRef.current) setLoad(false);}
+  },[toast$]);
+
+  useEffect(()=>{load();},[load]);
+  useEffect(()=>{const t=setInterval(load,30000);return()=>clearInterval(t);},[load]);
+  useEffect(()=>{
+    const h=e=>{if(e.data?.type==='__activate_edit_mode'){}};
+    window.addEventListener('message',h);
+    window.parent.postMessage({type:'__edit_mode_available'},'*');
+    return()=>window.removeEventListener('message',h);
+  },[]);
+
+  const withMut=async fn=>{mutatingRef.current=true;try{await fn();await load(true);}finally{mutatingRef.current=false;}};
+  const saveQuest=async body=>{await withMut(async()=>{if(editQ?.id){await API.editQ(editQ.id,body);toast$('已更新');}else{await API.addQ(body);toast$('任务已创建 ✦');}setEditQ(null);});};
+  const completeQ=async id=>{await withMut(async()=>{await API.complQ(id);toast$('任务完成！✦ 获得奖励');});};
+  const deleteQ=id=>setConf({id,msg:'确定要删除这个任务吗？此操作无法撤销。'});
+  const doDelete=async()=>{if(!confirm) return;await withMut(async()=>{await API.delQ(confirm.id);toast$('已删除');});setConf(null);};
+  const useTag=async tag=>{await withMut(async()=>{await API.useTag(tag.id,{write_calendar:true,start:toAPI(nowPlus(0))});toast$('任务已创建 ✦');});};
+
+  if(loading) return(
+    <>
+      <SilkBg/>
+      <div className="spin-wrap">
+        <CandleIcon size={40} animate/>
+        <div className="ring" style={{marginTop:8}}/>
+        <div className="spin-lbl">财富流通中心</div>
+      </div>
+    </>
+  );
+
+  const d=data??{};
+  return(
+    <>
+      <SilkBg/>
+      <CursorStars/>
+      <div className="page">
+        <Header player={d.player} serverTime={d.server_time}/>
+        <MonthChart charts={d.charts}/>
+        <div className="mid-grid">
+          <div>
+            <CreateForm editQuest={editQ} onSave={saveQuest} onCancelEdit={()=>setEditQ(null)}/>
+            <QuickTags tags={d.quick_tags??[]} onUse={useTag}/>
+          </div>
+          <TaskTable quests={d.quests??[]} onComplete={completeQ} onEdit={setEditQ} onDelete={deleteQ}/>
+        </div>
+        <div className="bot-grid">
+          <TypeChart charts={d.charts}/>
+          <WeeklyOutline weekly_outline={d.weekly_outline}/>
+        </div>
+      </div>
+      <FloatReminder quests={d.quests??[]}/>
+      {confirm&&<Confirm msg={confirm.msg} onYes={doDelete} onNo={()=>setConf(null)}/>}
+      {toast&&<Toast key={toast.k} msg={toast.msg} type={toast.type} onDone={()=>setToast(null)}/>}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
